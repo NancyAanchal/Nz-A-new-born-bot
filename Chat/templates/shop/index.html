@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nz : A Newborn Bot</title>
+
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            
+            
+        }
+        
+        .chat-container {
+            max-width: 650px;
+            font-size: 20px;
+            color: #ffffff;
+            margin: 20px auto;
+            border: 3px double #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: rgb(127, 173, 130);
+            border-radius: 25px;
+        }
+        
+        .chat-header {
+            background-color: #366d2b;
+            padding: 10px;
+            border:3px double #ffffff;
+            text-align: center;
+            color: #ffffff;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+        }
+        
+        .chat-messages {
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 25px;
+        }
+
+        .bot-text{
+            text-align:left;
+            line-height: 15px;
+            padding-left: 5px;
+        }   
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            border-radius: 20px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            border-bottom:3px solid #8f9b91;
+            width:  60%;
+            text-align: center;
+        }
+        
+        .chat-input button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #168158;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        
+        .chat-input button:hover {
+            background-color: #166146;
+        }
+
+        .userText{
+            text-align: right;
+            line-height: 15px;
+            padding-left: 5px;
+
+        }
+        .navbar {
+      background-color: #222;
+      overflow: hidden;
+    }
+
+    .navbar a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 16px;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 18px;
+    }
+
+    .navbar a:hover {
+      background-color: #444;
+    }
+
+    .navbar a.logo {
+      font-size: 24px;
+    }
+
+    .navbar-right {
+      float: right;
+    }
+
+    .navbar a.icon {
+      display: none;
+    }
+
+    @media screen and (max-width: 600px) {
+      .navbar a:not(.logo) {
+        display: none;
+      }
+      .navbar a.icon {
+        float: right;
+        display: block;
+      }
+      .navbar.responsive {
+        position: relative;
+      }
+      .navbar.responsive a.icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .navbar.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+    }
+
+        </style>
+        
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+    <!-- navigation bar -->  
+    <div class="navbar" id="navbar">
+        <a href="#" class="logo">Talk to Nz</a>
+        <div class="navbar-right">
+          <a href="#">Home</a>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">About</a>
+          <a href="#" class="icon" onclick="toggleResponsiveNav()">&#9776;</a>
+        </div>
+      </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Nz : A Newborn Bot</h1>
+        </div>
+
+        <div class="chat-bot">
+            <p class="bot-text"><span>Nz: Please talk to me!</span></p>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Chat messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input"  >
+            <input type="text" class="form-control" id="textinput" placeholder="Type your message...">
+            <button type="submit" id="send-button">Send</button>
+        </div>
+    
+</div>
+
+    <!-- Add a button to clear the chat history -->
+
+
+    <script>
+        function getUserResponse(){
+            var userText=$('#textinput').val();
+            var userHTML="<p class='userText'>You: <span>"+userText+"</span/></p>";
+                $('#textinput').val("");
+
+                $('#chat-messages').append(userHTML);
+
+                $.get('/nz/chat-with-nz',{user_input:userText}).done(function(data){
+                    var response="<p class='bot-text'>Nz: <span>"+ data +"</span/></p>";
+                        $('#chat-messages').append(response);
+                })
+
+        }
+
+
+        $('#send-button').click(function(){
+            getUserResponse();
+        })
+
+        $('#textinput').keypress(function(enter){
+            if (event.key=='Enter'){
+                getUserResponse();
+            }
+        })
+
+        // navigation bar
+        function toggleResponsiveNav() {
+        var navbar = document.getElementById("navbar");
+        navbar.classList.toggle("responsive");
+    }
+    </script>
+
+</body>
+</html>
